@@ -1,23 +1,8 @@
 import type { Page } from 'playwright';
 import type { ExtractedPage } from './types.js';
 
-export interface PageEvalResult {
-  status: number;
-  contentType: string;
-  title: string | null;
-  metaDescription: string | null;
-  canonical: string | null;
-  robotsMeta: string | null;
-  headings: { level: number; text: string }[];
-  links: { href: string; text: string; rel?: string }[];
-  images: { src: string; alt: string; lazy: boolean }[];
-  jsonLd: string[];
-  hreflang: { href: string; lang: string }[];
-  wordCount: number;
-}
-
-export async function extractPageData(page: Page, url: string, depth: number): Promise<ExtractedPage> {
-  const raw: PageEvalResult = await page.evaluate(() => {
+export async function extractPageData(page: Page, url: string, depth: number, captureHtml?: boolean): Promise<ExtractedPage> {
+  const raw = await page.evaluate((opts) => {
     const getMeta = (name: string): string | null => {
       const el = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`);
       return el?.getAttribute('content') ?? null;
@@ -54,7 +39,7 @@ export async function extractPageData(page: Page, url: string, depth: number): P
     const wordCount = textContent.split(/\s+/).filter(Boolean).length;
 
     return {
-      status: document.querySelector('meta[name="robots"]') ? 200 : 200,
+      status: 200,
       contentType: document.contentType || 'text/html',
       title: document.title || null,
       metaDescription: getMeta('description'),
@@ -66,8 +51,9 @@ export async function extractPageData(page: Page, url: string, depth: number): P
       jsonLd,
       hreflang,
       wordCount,
+      html: opts?.captureHtml ? document.documentElement.outerHTML : undefined,
     };
-  });
+  }, { captureHtml });
 
   const pageUrl = page.url();
   const baseUrl = new URL(pageUrl);
@@ -105,5 +91,6 @@ export async function extractPageData(page: Page, url: string, depth: number): P
     wordCount: raw.wordCount,
     hasH1: raw.headings.some((h) => h.level === 1),
     hasMultipleH1: raw.headings.filter((h) => h.level === 1).length > 1,
+    rawHtml: raw.html,
   };
 }

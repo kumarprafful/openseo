@@ -7,6 +7,7 @@ export interface CrawlConfig {
   excludePatterns?: RegExp[];
   renderJs?: boolean;
   timeout?: number;
+  captureHtml?: boolean;
 }
 
 export interface CrawlProgress {
@@ -33,6 +34,7 @@ export interface ExtractedPage {
   wordCount: number;
   hasH1: boolean;
   hasMultipleH1: boolean;
+  rawHtml?: string;
 }
 
 export interface AiCrawlerStatus {

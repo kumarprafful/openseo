@@ -34,7 +34,44 @@ const url = parsed.url ? String(parsed.url) : undefined;
 const json = parsed.json === true;
 const local = parsed.local === true;
 
-if (command === 'audit') {
+if (command === 'geo') {
+  const targetUrl = url;
+  if (!targetUrl) {
+    console.error('Usage: openseo geo --url <url> [--json]');
+    process.exit(1);
+  }
+
+  const { crawl, checkAllGeo, calculateGeoScore, fetchAndAnalyzeRobotsTxt } = await import('@openseo/crawler');
+
+  try {
+    const crawlResult = await crawl({ url: targetUrl, maxPages: 1, maxDepth: 0, captureHtml: true });
+    const robots = await fetchAndAnalyzeRobotsTxt(targetUrl).catch(() => null);
+    const page = crawlResult.pages[0];
+    if (!page) throw new Error('No content received');
+
+    const checks = checkAllGeo(page, robots);
+    const score = calculateGeoScore(checks);
+
+    if (json) {
+      console.log(JSON.stringify(score, null, 2));
+    } else {
+      console.log(`\nGEO Analysis for ${targetUrl}`);
+      console.log(`Overall Score: ${score.overall}/100\n`);
+      for (const check of score.checks) {
+        const tag = check.status === 'pass' ? '✓' : check.status === 'warn' ? '⚠️' : '⛔';
+        console.log(`  ${tag} ${check.name}: ${check.score}/100 (${check.status})`);
+        console.log(`     ${check.details}`);
+        if (check.recommendation) console.log(`     Fix: ${check.recommendation}`);
+        console.log('');
+      }
+    }
+
+    process.exit(0);
+  } catch (e) {
+    console.error('GEO analysis failed:', e instanceof Error ? e.message : e);
+    process.exit(1);
+  }
+} else if (command === 'audit') {
   const targetUrl = (url as string) || (local ? 'http://localhost:3000' : undefined);
   if (!targetUrl) {
     console.error('Usage: openseo audit --url <url> [--json] [--non-interactive]');

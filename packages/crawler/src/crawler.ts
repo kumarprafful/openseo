@@ -72,7 +72,7 @@ export async function crawl(config: CrawlConfig, onProgress?: ProgressCallback):
 
         emit('extracting', pageNum, Math.min(opts.maxPages, totalDiscovered), pageUrl);
 
-        const extracted = await extractPageData(page, pageUrl, depth);
+        const extracted = await extractPageData(page, pageUrl, depth, opts.captureHtml);
         if (response) extracted.status = response.status();
         pages.push(extracted);
 

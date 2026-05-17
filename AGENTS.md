@@ -32,6 +32,8 @@ To build one package: `turbo build --filter=@openseo/cli`
 | `openseo audit --url <url>` | Non-interactive audit, text output |
 | `openseo audit --url <url> --json` | Non-interactive audit, JSON output |
 | `openseo audit --local` | Audit localhost:3000 |
+| `openseo geo --url <url>` | Non-interactive GEO analysis, text output |
+| `openseo geo --url <url> --json` | Non-interactive GEO analysis, JSON output |
 
 ## Key conventions
 
@@ -41,15 +43,17 @@ To build one package: `turbo build --filter=@openseo/cli`
 
 ## Implemented analyzers (crawler)
 
-Meta (title, description, canonical), Headings (missing H1, multiple H1), Links (internal count, nofollow), Images (missing alt, excessive lazy loading), Content (thin content <300 words, zero content), Schema (no/partial structured data, types found), Hreflang (missing), Robots (missing robots.txt, AI-crawler blocked, no sitemap directive).
+**SEO:** Meta (title, description, canonical), Headings (missing H1, multiple H1), Links (internal count, nofollow), Images (missing alt, excessive lazy loading), Content (thin content <300 words, zero content), Schema (no/partial structured data, types found), Hreflang (missing), Robots (missing robots.txt, AI-crawler blocked, no sitemap directive).
+
+**GEO (12 checks):** Statistics & Citations, Structured Data, Definition Blocks, Answer Blocks, Content Extractability, AI Bot Access, FAQ Blocks, Content Type Scoring, Freshness Signals, Author Attribution, AI Writing Signals, Schema Markup. Each produces score 0-100 + weighted aggregate.
 
 ## What's stub vs real
 
 | Screen/Package | Status |
 |---|---|
-| Scaffold (info → select → execute → result) | Fully implemented (4 sub-screens) |
+| Scaffold (info → select → execute → result) | Fully implemented |
 | **Audit (input → progress → results)** | **Phase 2 complete** |
-| GEO | Stub — title + escape-to-menu only |
+| **GEO (input → run → score → detail)** | **Phase 3 complete** |
 | Content, Settings | Not registered in App (missing from SCREENS map) |
 | Agents | Stub class |
 | Dashboard | Build disabled |
@@ -58,8 +62,9 @@ Meta (title, description, canonical), Headings (missing H1, multiple H1), Links 
 
 - `turbo typecheck` depends on `^build` — dependency packages must be built first for type resolution.
 - **Crawler tsconfig includes `"lib": ["ES2022", "DOM"]`** because extractors use `document` etc. inside Playwright's `page.evaluate()`.
+- GEO analysis requires `captureHtml: true` on crawl config (set automatically in GEO TUI and CLI).
 - Ink React key warning on duplicate keys in feature list (cosmetic).
 - "Raw mode not supported on current process.stdin" in non-TTY — expected, harmless.
 - `tsup` bundles CLI as single ESM file; all imports are `.js` extensions (required by ESM).
 - No CI workflows yet.
-- The `openseo audit --json` command uses dynamic `import()` for the crawler package (only loaded when audit command is used).
+- CLI commands use dynamic `import()` for the crawler package (only loaded when needed).

@@ -12,19 +12,23 @@ npx @openseo/cli
 
 | Command | Description |
 |---|---|
-| `openseo` | Launch TUI — detect project health, scaffold, audit |
-| `openseo audit --url <url>` | Run technical SEO audit headlessly, output text or JSON |
+| `openseo` | Launch TUI — detect project health, scaffold, audit, GEO |
+| `openseo audit --url <url>` | Run technical SEO audit, text or JSON output |
+| `openseo geo --url <url>` | Run GEO analysis on a single page, text or JSON output |
 
-## Features (Phase 2 — Crawler & Audit)
+## Features (Phase 3 — Crawler, Audit & GEO)
 
 - **11 scaffolding features** — Structured data, breadcrumbs, 404 page, sitemap, robots.txt, RSS, OG images, llms.txt, analytics, content validation, launch checklist
-- **Headless crawl** — Playwright-based crawler with configurable depth, page limit, same-origin filtering
-- **Extractors** — Meta tags, headings, links, images, JSON-LD schema, hreflang, word count
-- **8 Analyzers** — Meta (title/description/canonical), headings (missing/multiple H1), links (internal, nofollow), images (alt text, lazy loading), content (thin content <300 words), schema (present/absent types), hreflang (missing), robots.txt (AI crawler audit)
+- **Headless crawl** — Playwright-based crawler with configurable depth, page limit, same-origin filtering, optional HTML capture
+- **Extractors** — Meta tags, headings, links, images, JSON-LD schema, hreflang, word count, raw HTML
+- **8 SEO analyzers** — Meta (title/description/canonical), headings (missing/multiple H1), links (internal, nofollow), images (alt text, lazy loading), content (thin content <300 words), schema (present/absent types), hreflang (missing), robots.txt (AI crawler audit)
 - **AI-crawler audit** — Checks GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended, Bytespider access in robots.txt
 - **Schema validation** — Validates required properties for Article, Organization, FAQPage, BreadcrumbList, LocalBusiness, Product, Recipe, Event, Review
+- **12 GEO checks** — Statistics & citations, structured data, definition blocks, answer blocks, content extractability, AI bot access, FAQ blocks, content type scoring, freshness signals, author attribution, AI writing signals, schema markup
+- **GEO scoring** — Weighted aggregate score (0-100) with per-check breakdown and recommendations
+- **GEO TUI** — URL input, score visualization, per-check detail view
 - **Audit TUI** — URL input, live progress, results grouped by severity
-- **CI/CD ready** — `--json` flag for structured output
+- **CI/CD ready** — `--json` flag on audit and geo commands
 - **Persistent TUI** — Full-screen terminal dashboard with keyboard navigation (Ink + React)
 
 ## Quick Start
@@ -42,6 +46,13 @@ The TUI auto-detects your project (Next.js, Astro, Remix), checks existing SEO s
 openseo audit --url https://example.com
 openseo audit --url https://example.com --json   # CI output
 openseo audit --local                             # localhost:3000
+```
+
+### Run a GEO analysis
+
+```bash
+openseo geo --url https://example.com/blog/post
+openseo geo --url https://example.com/blog/post --json   # CI output
 ```
 
 ## Requirements
