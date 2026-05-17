@@ -101,9 +101,11 @@ export function ScaffoldInputForm(props: Props) {
           <Box key={f}>
             <Text>{isActive ? '▸' : ' '}</Text>
             <Text> </Text>
-            <Text bold={isActive} width={40}>
-              {labels[f]}:
-            </Text>
+            <Box width={40}>
+              <Text bold={isActive}>
+                {labels[f]}:
+              </Text>
+            </Box>
             <Text color={isActive ? 'cyan' : 'white'}>
               {editing && isActive ? `${display}█` : display}
             </Text>

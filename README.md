@@ -5,54 +5,61 @@
 **Automated SEO infrastructure, AI-powered content optimization, and generative engine optimization — all from your terminal.**
 
 ```bash
-npx openseo-cli
+npx @openseo/cli
 ```
 
 ## What It Does
 
 | Command | Description |
 |---|---|
-| `openseo` | Launch the TUI — detect project health, get ranked suggestions |
-| `openseo scaffold` | Scaffold SEO infrastructure (11 features: sitemap, robots.txt, structured data, OG images, llms.txt, etc.) |
-| `openseo audit` | Full technical SEO audit — crawl pages, find issues, fix them |
-| `openseo geo` | GEO (Generative Engine Optimization) analysis — score pages for AI search readiness |
-| `openseo content` | AI-powered content strategy, gap analysis, and creation |
-| `openseo check ai-crawlers` | Audit GPTBot, ClaudeBot, PerplexityBot access |
+| `openseo` | Launch TUI — detect project health, scaffold, audit |
+| `openseo audit --url <url>` | Run technical SEO audit headlessly, output text or JSON |
 
-## Features
+## Features (Phase 2 — Crawler & Audit)
 
 - **11 scaffolding features** — Structured data, breadcrumbs, 404 page, sitemap, robots.txt, RSS, OG images, llms.txt, analytics, content validation, launch checklist
-- **Technical SEO audit** — Headless crawl, schema validation, AI-crawler access check
-- **GEO/AEO analysis** — 12 GEO signal checks for ChatGPT, Perplexity, AI Overviews visibility
-- **Multi-agent AI system** — Content strategist, creator, optimizer, GEO specialist, auditor agents via LangChain.js
-- **Multi-LLM support** — OpenAI, Anthropic, Google, Ollama, OpenRouter
-- **CI/CD ready** — `--json` and `--non-interactive` on every command
-- **Persistent TUI** — Full-screen terminal dashboard with keyboard navigation
+- **Headless crawl** — Playwright-based crawler with configurable depth, page limit, same-origin filtering
+- **Extractors** — Meta tags, headings, links, images, JSON-LD schema, hreflang, word count
+- **8 Analyzers** — Meta (title/description/canonical), headings (missing/multiple H1), links (internal, nofollow), images (alt text, lazy loading), content (thin content <300 words), schema (present/absent types), hreflang (missing), robots.txt (AI crawler audit)
+- **AI-crawler audit** — Checks GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended, Bytespider access in robots.txt
+- **Schema validation** — Validates required properties for Article, Organization, FAQPage, BreadcrumbList, LocalBusiness, Product, Recipe, Event, Review
+- **Audit TUI** — URL input, live progress, results grouped by severity
+- **CI/CD ready** — `--json` flag for structured output
+- **Persistent TUI** — Full-screen terminal dashboard with keyboard navigation (Ink + React)
 
 ## Quick Start
 
 ```bash
 cd my-project
-npx openseo-cli
+npx @openseo/cli
 ```
 
 The TUI auto-detects your project (Next.js, Astro, Remix), checks existing SEO state, and shows ranked suggestions.
+
+### Run an audit
+
+```bash
+openseo audit --url https://example.com
+openseo audit --url https://example.com --json   # CI output
+openseo audit --local                             # localhost:3000
+```
 
 ## Requirements
 
 - Node.js 20+
 - pnpm (for development)
+- Playwright browsers (`pnpm exec playwright install chromium` if running crawler locally)
 
 ## Project Structure
 
 ```
 openseo/
 ├── packages/
-│   ├── cli/          # Entry point, TUI (Ink + React)
-│   ├── core/         # Shared SEO utilities
-│   ├── agents/       # LangChain.js AI agents
-│   ├── crawler/      # Playwright headless crawler
-│   └── dashboard/    # Self-hosted web UI (Next.js)
+│   ├── cli/          # Entry point, TUI (Ink + React + Zustand)
+│   ├── core/         # Shared utilities + AuditIssue types
+│   ├── crawler/      # Playwright crawler, extractors, analyzers, robots parser, schema validator
+│   ├── agents/       # LangChain.js AI agents (stub — Phase 4)
+│   └── dashboard/    # Web dashboard (stub — Phase 5)
 └── docs/
     ├── 01-architecture.md
     ├── 02-cli-scaffold.md
@@ -72,8 +79,10 @@ git clone https://github.com/your-org/openseo
 cd openseo
 pnpm install
 pnpm build
-pnpm dev
+pnpm typecheck
 ```
+
+Run `pnpm dev` for watch mode on all packages.
 
 ## License
 

@@ -29,7 +29,7 @@ export interface ExistingSEO {
 export interface AuditIssue {
   id: string;
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
-  category: 'technical' | 'content' | 'geo' | 'schema' | 'performance';
+  category: 'technical' | 'content' | 'geo' | 'schema' | 'performance' | 'links' | 'images' | 'headings';
   title: string;
   description: string;
   location: string;
@@ -37,6 +37,21 @@ export interface AuditIssue {
   recommendation: string;
   fixAvailable: boolean;
   aiSuggested: boolean;
+}
+
+export interface AuditResult {
+  url: string;
+  pagesCrawled: number;
+  totalPages: number;
+  durationMs: number;
+  issues: AuditIssue[];
+  summary: {
+    critical: number;
+    high: number;
+    medium: number;
+    low: number;
+    info: number;
+  };
 }
 
 export interface GeoScore {
