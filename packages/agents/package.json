@@ -8,7 +8,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean --target node20",
+    "build": "tsup --config tsup.config.ts",
     "dev": "tsup src/index.ts --format esm --dts --watch --target node20",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",

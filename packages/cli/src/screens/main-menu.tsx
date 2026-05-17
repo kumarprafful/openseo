@@ -48,6 +48,7 @@ export function MainMenu() {
       case '2': setScreen('scaffold'); break;
       case '3': setScreen('geo'); break;
       case '4': setScreen('content'); break;
+      case '5': setScreen('settings'); break;
       case 'q': process.exit(0); break;
     }
   });
@@ -92,6 +93,7 @@ export function MainMenu() {
             <Text>2)  📦  Scaffold SEO Infrastructure</Text>
             <Text>3)  🌐  GEO Analysis</Text>
             <Text>4)  📝  Content Strategy</Text>
+            <Text>5)  ⚙️  Settings</Text>
             <Text>q)  Quit</Text>
           </Box>
         </>

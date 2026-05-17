@@ -21,14 +21,14 @@ To build one package: `turbo build --filter=@openseo/cli`
 - CLI = Ink (React 19) TUI + Zustand state. Screen routing via `useAppState().screen`.
 - `@openseo/core` — shared detection engine + `AuditIssue`/`AuditResult` types.
 - `@openseo/crawler` — Playwright-based headless crawler with extractors (meta, headings, links, images, schema, hreflang, content), robots.txt AI-crawler audit, schema validator, and `analyzeAll()` issue detection.
-- `@openseo/agents` — LangChain.js stub.
+- `@openseo/agents` — LangChain.js provider abstraction (`createModel`), 4 agent tools wrapping crawler functions (`crawl_site`, `analyze_seo`, `analyze_geo`, `suggest_fixes`), task-to-model router (`suggestModel`).
 - `@openseo/dashboard` — Next.js, build **disabled** until Phase 5.
 
 ## CLI commands
 
 | Command | Behavior |
 |---|---|
-| `openseo` | Launch TUI |
+| `openseo` | Launch TUI (scaffold, audit, GEO, settings) |
 | `openseo audit --url <url>` | Non-interactive audit, text output |
 | `openseo audit --url <url> --json` | Non-interactive audit, JSON output |
 | `openseo audit --local` | Audit localhost:3000 |
@@ -54,8 +54,8 @@ To build one package: `turbo build --filter=@openseo/cli`
 | Scaffold (info → select → execute → result) | Fully implemented |
 | **Audit (input → progress → results)** | **Phase 2 complete** |
 | **GEO (input → run → score → detail)** | **Phase 3 complete** |
-| Content, Settings | Not registered in App (missing from SCREENS map) |
-| Agents | Stub class |
+| **Settings (provider config form)** | **Phase 4 complete** |
+| Content | Not registered in App (missing from SCREENS map) |
 | Dashboard | Build disabled |
 
 ## Gotchas
@@ -68,3 +68,5 @@ To build one package: `turbo build --filter=@openseo/cli`
 - `tsup` bundles CLI as single ESM file; all imports are `.js` extensions (required by ESM).
 - No CI workflows yet.
 - CLI commands use dynamic `import()` for the crawler package (only loaded when needed).
+- `@openseo/agents` uses a `tsup.config.ts` with heavy externals (LangChain, Zod, workspace packages) to avoid bundling Playwright transitively.
+- LLM provider config is stored in-memory only (Zustand state). Not persisted to disk yet.

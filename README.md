@@ -16,18 +16,18 @@ npx @openseo/cli
 | `openseo audit --url <url>` | Run technical SEO audit, text or JSON output |
 | `openseo geo --url <url>` | Run GEO analysis on a single page, text or JSON output |
 
-## Features (Phase 3 — Crawler, Audit & GEO)
+## Features (Phase 4 — Crawler, Audit, GEO & AI Agents)
 
 - **11 scaffolding features** — Structured data, breadcrumbs, 404 page, sitemap, robots.txt, RSS, OG images, llms.txt, analytics, content validation, launch checklist
 - **Headless crawl** — Playwright-based crawler with configurable depth, page limit, same-origin filtering, optional HTML capture
 - **Extractors** — Meta tags, headings, links, images, JSON-LD schema, hreflang, word count, raw HTML
-- **8 SEO analyzers** — Meta (title/description/canonical), headings (missing/multiple H1), links (internal, nofollow), images (alt text, lazy loading), content (thin content <300 words), schema (present/absent types), hreflang (missing), robots.txt (AI crawler audit)
-- **AI-crawler audit** — Checks GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended, Bytespider access in robots.txt
-- **Schema validation** — Validates required properties for Article, Organization, FAQPage, BreadcrumbList, LocalBusiness, Product, Recipe, Event, Review
-- **12 GEO checks** — Statistics & citations, structured data, definition blocks, answer blocks, content extractability, AI bot access, FAQ blocks, content type scoring, freshness signals, author attribution, AI writing signals, schema markup
-- **GEO scoring** — Weighted aggregate score (0-100) with per-check breakdown and recommendations
-- **GEO TUI** — URL input, score visualization, per-check detail view
-- **Audit TUI** — URL input, live progress, results grouped by severity
+- **8 SEO analyzers** — Meta, headings, links, images, content, schema, hreflang, robots.txt/AI-crawler audit
+- **AI-crawler audit** — Checks 7 AI crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.) in robots.txt
+- **Schema validation** — Validates required properties for 11 Schema.org types
+- **12 GEO checks** — Full GEO/AEO readiness scoring with weighted aggregate
+- **Multi-LLM provider support** — OpenAI, Anthropic, Google, Ollama
+- **LangChain.js tools** — 4 agent tools wrapping crawler/analyzer functions
+- **Settings TUI** — Configure LLM provider, API key, model, base URL
 - **CI/CD ready** — `--json` flag on audit and geo commands
 - **Persistent TUI** — Full-screen terminal dashboard with keyboard navigation (Ink + React)
 
@@ -67,9 +67,9 @@ openseo geo --url https://example.com/blog/post --json   # CI output
 openseo/
 ├── packages/
 │   ├── cli/          # Entry point, TUI (Ink + React + Zustand)
-│   ├── core/         # Shared utilities + AuditIssue types
-│   ├── crawler/      # Playwright crawler, extractors, analyzers, robots parser, schema validator
-│   ├── agents/       # LangChain.js AI agents (stub — Phase 4)
+│   ├── core/         # Shared utilities + types (AuditIssue, AuditResult, GeoScore)
+│   ├── crawler/      # Playwright crawler, extractors, analyzers, robots parser, schema validator, GEO engine
+│   ├── agents/       # LangChain.js provider abstraction, tool wrappers, model routing
 │   └── dashboard/    # Web dashboard (stub — Phase 5)
 └── docs/
     ├── 01-architecture.md

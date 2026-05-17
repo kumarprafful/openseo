@@ -1,6 +1,7 @@
 import { createStore } from 'zustand';
 import { useStore } from 'zustand';
 import type { ProjectInfo, ExistingSEO } from '@openseo/core';
+import type { ProviderType } from '@openseo/agents';
 
 export type Screen = 'main-menu' | 'scaffold' | 'audit' | 'geo' | 'content' | 'settings' | 'scaffold-input' | 'scaffold-complete';
 
@@ -17,6 +18,13 @@ export interface ScaffoldInputState {
   selectedFeatures: string[];
 }
 
+export interface ProviderState {
+  provider: ProviderType;
+  apiKey: string;
+  model: string;
+  baseUrl: string;
+}
+
 export interface AppState {
   screen: Screen;
   setScreen: (screen: Screen) => void;
@@ -27,6 +35,8 @@ export interface AppState {
   scaffoldInput: ScaffoldInputState;
   updateScaffoldInput: (partial: Partial<ScaffoldInputState>) => void;
   setScaffoldInput: (input: ScaffoldInputState) => void;
+  providerConfig: ProviderState;
+  updateProviderConfig: (partial: Partial<ProviderState>) => void;
 }
 
 const defaultScaffoldInput: ScaffoldInputState = {
@@ -53,6 +63,9 @@ const store = createStore<AppState>((set) => ({
   updateScaffoldInput: (partial) =>
     set((state) => ({ scaffoldInput: { ...state.scaffoldInput, ...partial } })),
   setScaffoldInput: (input) => set({ scaffoldInput: input }),
+  providerConfig: { provider: 'openai', apiKey: '', model: '', baseUrl: '' },
+  updateProviderConfig: (partial) =>
+    set((state) => ({ providerConfig: { ...state.providerConfig, ...partial } })),
 }));
 
 export function useAppState() {
