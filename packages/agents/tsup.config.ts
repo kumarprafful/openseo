@@ -7,8 +7,6 @@ export default defineConfig({
   clean: true,
   target: 'node20',
   external: [
-    '@openseo/crawler',
-    '@openseo/core',
     'langchain',
     '@langchain/core',
     '@langchain/openai',
@@ -17,5 +15,6 @@ export default defineConfig({
     '@langchain/ollama',
     '@langchain/community',
     'zod',
+    'playwright',
   ],
 });

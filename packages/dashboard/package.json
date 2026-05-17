@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "echo 'Dashboard build disabled until Phase 5'",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

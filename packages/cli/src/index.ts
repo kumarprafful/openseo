@@ -118,11 +118,34 @@ if (command === 'geo') {
       }
     }
 
+    try {
+      const fs = await import('node:fs');
+      const p = await import('node:path');
+      const dir = p.join(process.cwd(), '.openseo', 'audits');
+      fs.mkdirSync(dir, { recursive: true });
+      const auditId = `audit-${Date.now()}`;
+      const record = { id: auditId, timestamp: new Date().toISOString(), ...result };
+      fs.writeFileSync(p.join(dir, `${auditId}.json`), JSON.stringify(record, null, 2));
+    } catch {
+      // audit save failure is non-fatal
+    }
+
     process.exit(0);
   } catch (e) {
     console.error('Audit failed:', e instanceof Error ? e.message : e);
     process.exit(1);
   }
+} else if (command === 'dashboard') {
+  console.error('');
+  console.error('  OpenSEO Dashboard');
+  console.error('');
+  console.error('  Start the dashboard:   cd packages/dashboard && pnpm dev');
+  console.error('  Then visit:            http://localhost:3000');
+  console.error('');
+  console.error('  The dashboard reads audit data from .openseo/audits/');
+  console.error('  in the project directory where you run `openseo audit`.');
+  console.error('');
+  process.exit(0);
 } else {
   console.error('');
   console.error('  ╭──────────────────────────────────────╮');

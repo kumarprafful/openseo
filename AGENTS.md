@@ -22,7 +22,7 @@ To build one package: `turbo build --filter=@openseo/cli`
 - `@openseo/core` — shared detection engine + `AuditIssue`/`AuditResult` types.
 - `@openseo/crawler` — Playwright-based headless crawler with extractors (meta, headings, links, images, schema, hreflang, content), robots.txt AI-crawler audit, schema validator, and `analyzeAll()` issue detection.
 - `@openseo/agents` — LangChain.js provider abstraction (`createModel`), 4 agent tools wrapping crawler functions (`crawl_site`, `analyze_seo`, `analyze_geo`, `suggest_fixes`), task-to-model router (`suggestModel`).
-- `@openseo/dashboard` — Next.js, build **disabled** until Phase 5.
+- `@openseo/dashboard` — Next.js 15 app with 3 pages (home with stats, audit list, audit detail), file-based JSON storage (`.openseo/audits/`), POST/GET `/api/audits` route.
 
 ## CLI commands
 
@@ -34,6 +34,8 @@ To build one package: `turbo build --filter=@openseo/cli`
 | `openseo audit --local` | Audit localhost:3000 |
 | `openseo geo --url <url>` | Non-interactive GEO analysis, text output |
 | `openseo geo --url <url> --json` | Non-interactive GEO analysis, JSON output |
+| `openseo dashboard` | Print instructions to start the web dashboard |
+| `openseo audit --url <url>` (all forms) | Saves result to `.openseo/audits/` automatically |
 
 ## Key conventions
 
@@ -56,7 +58,7 @@ To build one package: `turbo build --filter=@openseo/cli`
 | **GEO (input → run → score → detail)** | **Phase 3 complete** |
 | **Settings (provider config form)** | **Phase 4 complete** |
 | Content | Not registered in App (missing from SCREENS map) |
-| Dashboard | Build disabled |
+| Dashboard (home, list, detail, API) | Fully implemented — `next build` passes |
 
 ## Gotchas
 
@@ -66,7 +68,8 @@ To build one package: `turbo build --filter=@openseo/cli`
 - Ink React key warning on duplicate keys in feature list (cosmetic).
 - "Raw mode not supported on current process.stdin" in non-TTY — expected, harmless.
 - `tsup` bundles CLI as single ESM file; all imports are `.js` extensions (required by ESM).
-- No CI workflows yet.
+- CI: `.github/workflows/seo-audit.yml` — runs on PRs touching app/content/public/src, posts audit summary as PR comment.
 - CLI commands use dynamic `import()` for the crawler package (only loaded when needed).
-- `@openseo/agents` uses a `tsup.config.ts` with heavy externals (LangChain, Zod, workspace packages) to avoid bundling Playwright transitively.
+- `@openseo/agents` uses `tsup.config.ts` with externals for LangChain/Zod/Playwright. `@openseo/crawler` is NOT external (bundled to resolve DTS) — Playwright import stays external at runtime.
 - LLM provider config is stored in-memory only (Zustand state). Not persisted to disk yet.
+- Dashboard Next.js pages import `lib/data.ts` WITHOUT `.js` extension — Next.js webpack doesn't resolve `.js` → `.ts`.

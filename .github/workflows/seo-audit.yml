@@ -1,0 +1,43 @@
+name: SEO Audit
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'content/**'
+      - 'public/**'
+      - 'src/**'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npx @openseo/cli audit --url ${{ vars.PREVIEW_URL || 'http://localhost:3000' }} --json > seo-report.json
+      - name: Post audit summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('seo-report.json', 'utf-8'));
+            const summary = report.summary;
+            let body = '## 🔍 OpenSEO Audit Results\n\n';
+            body += `| Severity | Count |\n|---------|------|\n`;
+            body += `| Critical | ${summary.critical} |\n`;
+            body += `| High | ${summary.high} |\n`;
+            body += `| Medium | ${summary.medium} |\n`;
+            body += `| Low | ${summary.low} |\n\n`;
+            if (summary.critical > 0) {
+              body += '### ❌ New critical issues detected.\n';
+              body += 'Please review and fix before merging.\n';
+              process.exit(1);
+            } else {
+              body += '### ✅ No critical issues. Good to merge!\n';
+            }
+            github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body
+            });

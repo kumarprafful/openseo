@@ -16,7 +16,7 @@ npx @openseo/cli
 | `openseo audit --url <url>` | Run technical SEO audit, text or JSON output |
 | `openseo geo --url <url>` | Run GEO analysis on a single page, text or JSON output |
 
-## Features (Phase 4 — Crawler, Audit, GEO & AI Agents)
+## Features (Phase 5 — Crawler, Audit, GEO, AI Agents & Dashboard)
 
 - **11 scaffolding features** — Structured data, breadcrumbs, 404 page, sitemap, robots.txt, RSS, OG images, llms.txt, analytics, content validation, launch checklist
 - **Headless crawl** — Playwright-based crawler with configurable depth, page limit, same-origin filtering, optional HTML capture
@@ -28,6 +28,9 @@ npx @openseo/cli
 - **Multi-LLM provider support** — OpenAI, Anthropic, Google, Ollama
 - **LangChain.js tools** — 4 agent tools wrapping crawler/analyzer functions
 - **Settings TUI** — Configure LLM provider, API key, model, base URL
+- **Web dashboard** — Next.js 15 app with audit history, detail views, and API routes
+- **File-based persistence** — Audit results auto-saved to `.openseo/audits/` as JSON
+- **GitHub Actions CI** — Auto-audit PRs with summary comment
 - **CI/CD ready** — `--json` flag on audit and geo commands
 - **Persistent TUI** — Full-screen terminal dashboard with keyboard navigation (Ink + React)
 
@@ -55,6 +58,13 @@ openseo geo --url https://example.com/blog/post
 openseo geo --url https://example.com/blog/post --json   # CI output
 ```
 
+### View the dashboard
+
+```bash
+openseo dashboard                           # print instructions
+cd packages/dashboard && pnpm dev           # start Next.js dev server
+```
+
 ## Requirements
 
 - Node.js 20+
@@ -70,7 +80,7 @@ openseo/
 │   ├── core/         # Shared utilities + types (AuditIssue, AuditResult, GeoScore)
 │   ├── crawler/      # Playwright crawler, extractors, analyzers, robots parser, schema validator, GEO engine
 │   ├── agents/       # LangChain.js provider abstraction, tool wrappers, model routing
-│   └── dashboard/    # Web dashboard (stub — Phase 5)
+│   └── dashboard/    # Web dashboard (Next.js 15 — home, audit list, audit detail, API)
 └── docs/
     ├── 01-architecture.md
     ├── 02-cli-scaffold.md
