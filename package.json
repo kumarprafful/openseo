@@ -1,0 +1,23 @@
+{
+  "name": "openseo-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "OpenSEO — Open-source SEO, GEO & AEO suite for engineering teams",
+  "license": "MIT",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "clean": "turbo clean",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

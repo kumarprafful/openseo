@@ -1,0 +1,26 @@
+{
+  "name": "@openseo/dashboard",
+  "version": "0.0.1",
+  "private": true,
+  "description": "OpenSEO web dashboard — self-hosted Next.js UI for audit history and reporting",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "echo 'Dashboard build disabled until Phase 5'",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/react": "^19.0.0",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

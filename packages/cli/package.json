@@ -1,0 +1,38 @@
+{
+  "name": "@openseo/cli",
+  "version": "0.0.1",
+  "private": true,
+  "description": "OpenSEO CLI — Open-source SEO, GEO & AEO suite for engineering teams",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "openseo": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --clean --minify --target node20",
+    "dev": "tsup src/index.ts --format esm --watch --target node20",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@openseo/core": "workspace:*",
+    "@openseo/crawler": "workspace:*",
+    "@openseo/agents": "workspace:*",
+    "ink": "^7.0.0",
+    "react": "^19.0.0",
+    "@inquirer/prompts": "^7.0.0",
+    "chalk": "^5.4.0",
+    "ora": "^8.1.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "@types/react": "^19.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
